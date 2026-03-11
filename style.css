@@ -1,0 +1,285 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    touch-action: none; 
+}
+
+body {
+    background: linear-gradient(-45deg, #121212, #1a2a6c, #112240, #000000);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.game-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.score-board {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 24px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 1.2rem;
+    font-weight: bold;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.score-icon {
+    margin-right: 8px;
+    font-size: 1.4rem;
+}
+
+.score-value {
+    color: #00e5ff;
+    margin-left: 8px;
+    font-size: 1.5rem;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.2s;
+    display: inline-block;
+}
+
+/* Animation class triggered by JavaScript */
+.score-pop {
+    transform: scale(1.6) rotate(5deg);
+    color: #ffd700;
+    text-shadow: 0 0 10px #ffd700;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* Changed to 6 columns */
+    grid-gap: 8px; /* Slightly larger gap to let the coins breathe */
+    width: 100%;
+    max-width: 360px; /* Tighter max-width for better centering */
+    aspect-ratio: 1 / 1;
+    
+    /* Modern Glass UI Effect */
+    background: rgba(44, 44, 44, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    padding: 12px;
+    border-radius: 16px; /* Softer, more modern corners */
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+.grid div {
+    position: relative; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent; 
+    border-radius: 50%; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4); 
+    user-select: none;
+    transition: transform 0.2s;
+    
+    /* THE FIX: Shrink the actual coin, keep it perfectly round, and center it */
+    width: 75%; 
+    aspect-ratio: 1 / 1;
+    margin: auto; 
+    
+    /* Change this back to cover so it fills the new smaller circle */
+    background-size: cover; 
+    
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.grid div.wrong-swap {
+    animation: shake-red 0.3s ease-in-out;
+    box-shadow: 0 0 15px 5px rgba(255, 69, 58, 0.8);
+    z-index: 10;
+}
+
+@keyframes shake-red {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+.grid div.falling {
+    animation: smooth-drop 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+}
+
+@keyframes smooth-drop {
+    0% { transform: translateY(-100%); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(0); }
+}
+
+/* NEW: Candy Crush style pop effect */
+/* NEW: Vibrant Candy Crush style pop effect */
+.pop-effect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    
+    /* Change this back to cover as well */
+    background-size: cover; 
+    
+    background-position: center;
+    border-radius: 50%;
+    animation: crush-pop 0.4s ease-out forwards;
+    z-index: 20;
+}
+
+/* Creates the colorful expanding shockwave behind the coin */
+.pop-effect::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, var(--pop-color) 0%, transparent 70%);
+    transform: translate(-50%, -50%) scale(0.5);
+    border-radius: 50%;
+    z-index: -1;
+    animation: color-blast 0.4s ease-out forwards;
+    mix-blend-mode: screen;
+}
+
+@keyframes crush-pop {
+    0% { 
+        transform: scale(1); 
+        filter: brightness(1); 
+        opacity: 1; 
+    }
+    40% { 
+        transform: scale(1.2) rotate(15deg); 
+        filter: brightness(1.5) saturate(1.5); 
+        opacity: 0.9; 
+        box-shadow: 0 0 20px var(--pop-color); 
+    }
+    100% { 
+        transform: scale(0) rotate(-15deg); 
+        filter: brightness(2) saturate(2); 
+        opacity: 0; 
+        box-shadow: 0 0 40px var(--pop-color); 
+    }
+}
+
+@keyframes color-blast {
+    0% { 
+        transform: translate(-50%, -50%) scale(0.5); 
+        opacity: 0.8; 
+    }
+    100% { 
+        transform: translate(-50%, -50%) scale(2.5); 
+        opacity: 0; 
+    }
+}
+
+#dead-end-message {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(44, 44, 44, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 30px;
+    border-radius: 16px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.8);
+    z-index: 100;
+}
+
+#dead-end-message p {
+    margin-bottom: 20px;
+    color: #ff453a; /* Danger red text */
+}
+
+#retry-btn {
+    background: #0088cc; /* Telegram Blue */
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 136, 204, 0.4);
+    transition: background 0.2s, transform 0.1s;
+}
+
+#retry-btn:active {
+    transform: scale(0.95);
+    background: #0077b5;
+}
+
+/* Add these new slide animations to the bottom of your style.css file */
+
+.slide-right { animation: slideRight 0.2s ease-in-out forwards; z-index: 30; }
+.slide-left { animation: slideLeft 0.2s ease-in-out forwards; z-index: 30; }
+.slide-down { animation: slideDown 0.2s ease-in-out forwards; z-index: 30; }
+.slide-up { animation: slideUp 0.2s ease-in-out forwards; z-index: 30; }
+
+@keyframes slideRight { 
+    0% { transform: translateX(0); } 
+    100% { transform: translateX(calc(100% + 6px)); } 
+}
+@keyframes slideLeft { 
+    0% { transform: translateX(0); } 
+    100% { transform: translateX(calc(-100% - 6px)); } 
+}
+@keyframes slideDown { 
+    0% { transform: translateY(0); } 
+    100% { transform: translateY(calc(100% + 6px)); } 
+}
+@keyframes slideUp { 
+    0% { transform: translateY(0); } 
+    100% { transform: translateY(calc(-100% - 6px)); } 
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* New Creative Title */
+.glow-title {
+    font-size: 3rem;
+    font-weight: 900;
+    background: linear-gradient(to right, #0088cc, #00e5ff, #aa00ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: title-pulse 2s infinite alternate;
+    margin-bottom: 15px;
+}
+
+@keyframes title-pulse {
+    from { filter: drop-shadow(0 0 5px rgba(0, 136, 204, 0.4)); }
+    to { filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.8)); }
+}

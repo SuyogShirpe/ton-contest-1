@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TON Match Game</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <header>
+            <h1 class="glow-title">TON Crush</h1>
+            <div class="score-board">
+                <span class="score-icon">💎</span> Score: <span id="score" class="score-value">0</span>
+            </div>
+        </header>
+        <div id="grid" class="grid"></div>
+        
+        <div id="dead-end-message">
+            <p>Dead End! No moves left.</p>
+            <button id="retry-btn">Retry</button>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
