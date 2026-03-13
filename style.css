@@ -12,9 +12,14 @@ body {
     animation: gradientBG 30s ease infinite;
     color: #ffffff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* Keeps it centered horizontally */
+    
+    /* THE FIX: Anchor to the top instead of the middle */
+    align-items: flex-start; 
+    padding-top: 6vh; /* Creates a perfect, consistent gap from the mobile notch */
+    
     height: 100vh;
     overflow: hidden;
 }
@@ -425,4 +430,18 @@ header {
 
 #start-game-btn:active {
     transform: scale(0.95);
+}
+
+/* Artist Credit Styling */
+.artist-credit {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5); /* Slightly faded so it doesn't distract from the button */
+    margin-top: 20px;
+    letter-spacing: 0.5px;
+}
+
+.artist-credit span {
+    color: #00e5ff; /* TON Blue */
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0, 229, 255, 0.4);
 }
